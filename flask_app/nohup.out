@@ -1,0 +1,30 @@
+[2025-04-04 12:53:57 +0000] [5166] [INFO] Starting gunicorn 23.0.0
+[2025-04-04 12:53:57 +0000] [5166] [INFO] Listening at: unix:/root/flask_app/flaskapp.sock (5166)
+[2025-04-04 12:53:57 +0000] [5166] [INFO] Using worker: sync
+[2025-04-04 12:53:57 +0000] [5167] [INFO] Booting worker with pid: 5167
+[2025-04-04 12:53:57 +0000] [5168] [INFO] Booting worker with pid: 5168
+[2025-04-04 12:53:57 +0000] [5169] [INFO] Booting worker with pid: 5169
+Traceback (most recent call last):
+  File "/root/flask_app/app.py", line 2, in <module>
+    from prometheus_flask_exporter import PrometheusMetrics
+ModuleNotFoundError: No module named 'prometheus_flask_exporter'
+Traceback (most recent call last):
+  File "/root/flask_app/app.py", line 2, in <module>
+    from prometheus_flask_exporter import PrometheusMetrics
+ModuleNotFoundError: No module named 'prometheus_flask_exporter'
+Traceback (most recent call last):
+  File "/root/flask_app/app.py", line 2, in <module>
+    from prometheus_flask_exporter import PrometheusMetrics
+ModuleNotFoundError: No module named 'prometheus_flask_exporter'
+Traceback (most recent call last):
+  File "/root/flask_app/app.py", line 2, in <module>
+    from prometheus_flask_exporter import PrometheusMetrics
+ModuleNotFoundError: No module named 'prometheus_flask_exporter'
+Traceback (most recent call last):
+  File "/root/flask_app/app.py", line 2, in <module>
+    from prometheus_flask_exporter import PrometheusMetrics
+ModuleNotFoundError: No module named 'prometheus_flask_exporter'
+ * Serving Flask app 'app'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
