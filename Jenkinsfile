@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        VENV_PATH = "${WORKSPACE}/venv"
+        CONTAINER_ID = '101'
+        DEST_DIR = '/root/flask_app'
     }
 
     stages {
@@ -26,12 +27,16 @@ pipeline {
         stage('Deploy Flask App') {
             steps {
                 sh '''
-                echo Copying files to app directory...
-                sudo cp -r Jenkinsfile __pycache__ app.py nohup.out requirements.txt venv /root/flask_app/
+                echo "Copying files to container..."
+                sudo pct push ${CONTAINER_ID} Jenkinsfile ${DEST_DIR}/
+                sudo pct push ${CONTAINER_ID} app.py ${DEST_DIR}/
+                sudo pct push ${CONTAINER_ID} nohup.out ${DEST_DIR}/
+                sudo pct push ${CONTAINER_ID} requirements.txt ${DEST_DIR}/
+                sudo pct push ${CONTAINER_ID} venv ${DEST_DIR}/ --recursive
 
-                echo Restarting SystemD service...
-                sudo systemctl daemon-reexec
-                sudo systemctl restart flask_app
+                echo "Restarting flask_app service inside container..."
+                sudo pct exec ${CONTAINER_ID} -- systemctl daemon-reexec
+                sudo pct exec ${CONTAINER_ID} -- systemctl restart flask_app
                 '''
             }
         }
