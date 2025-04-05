@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        PROXMOX_HOST = '192.168.29.174'
         CONTAINER_ID = '101'
         DEST_DIR = '/root/flask_app'
         CONTAINER_PORT = '5000'
@@ -17,12 +18,12 @@ pipeline {
         stage('Push Code to Container') {
             steps {
                 sh '''
-                echo "Creating destination directory in container..."
-                sudo pct exec $CONTAINER_ID -- mkdir -p $DEST_DIR
+                echo "Creating app directory in container via Proxmox host..."
+                ssh root@$PROXMOX_HOST "pct exec $CONTAINER_ID -- mkdir -p $DEST_DIR"
 
-                echo "Pushing files to container..."
+                echo "Transferring files to container via Proxmox host..."
                 for file in Jenkinsfile app.py requirements.txt; do
-                    sudo pct push $CONTAINER_ID $file $DEST_DIR/
+                    ssh root@$PROXMOX_HOST "pct push $CONTAINER_ID $file $DEST_DIR/"
                 done
                 '''
             }
@@ -31,18 +32,19 @@ pipeline {
         stage('Install Dependencies in Container') {
             steps {
                 sh '''
-                echo "Installing Python dependencies inside container..."
-                sudo pct exec $CONTAINER_ID -- bash -c "cd $DEST_DIR && python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt"
+                echo "Installing Python dependencies inside container via Proxmox host..."
+                ssh root@$PROXMOX_HOST "pct exec $CONTAINER_ID -- bash -c 'cd $DEST_DIR && python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt'"
                 '''
             }
         }
 
-        stage('Restart Flask App Service') {
+        stage('Restart Flask App via systemd') {
             steps {
                 sh '''
-                echo "Restarting Flask systemd service in container..."
-                sudo pct exec $CONTAINER_ID -- systemctl daemon-reexec
-                sudo pct exec $CONTAINER_ID -- systemctl restart flask_app
+                echo "Restarting Flask app service via systemd in container..."
+                ssh root@$PROXMOX_HOST "pct exec $CONTAINER_ID -- systemctl daemon-reexec"
+                ssh root@$PROXMOX_HOST "pct exec $CONTAINER_ID -- systemctl daemon-reload"
+                ssh root@$PROXMOX_HOST "pct exec $CONTAINER_ID -- systemctl restart flask_app"
                 '''
             }
         }
@@ -52,7 +54,7 @@ pipeline {
                 script {
                     echo "Fetching container IP..."
                     def containerIP = sh(
-                        script: "sudo pct exec $CONTAINER_ID -- hostname -I | awk '{print $1}'",
+                        script: "ssh root@$PROXMOX_HOST \"pct exec $CONTAINER_ID -- hostname -I | awk '{print \\$1}'\"",
                         returnStdout: true
                     ).trim()
 
@@ -65,8 +67,8 @@ pipeline {
 
     post {
         always {
-            echo "Fetching last 50 logs from flask_app service inside the container..."
-            sh 'sudo pct exec 101 -- journalctl -u flask_app --no-pager -n 50'
+            echo "Fetching logs from flask_app service in container..."
+            sh 'ssh root@192.168.29.174 "pct exec 101 -- journalctl -u flask_app --no-pager -n 50"'
         }
 
         failure {
