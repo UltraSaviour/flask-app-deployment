@@ -28,15 +28,15 @@ pipeline {
             steps {
                 sh '''
                 echo "Copying files to container..."
-                sudo pct push ${CONTAINER_ID} Jenkinsfile ${DEST_DIR}/
-                sudo pct push ${CONTAINER_ID} app.py ${DEST_DIR}/
-                sudo pct push ${CONTAINER_ID} nohup.out ${DEST_DIR}/
-                sudo pct push ${CONTAINER_ID} requirements.txt ${DEST_DIR}/
-                sudo pct push ${CONTAINER_ID} venv ${DEST_DIR}/ --recursive
+                sudo pct push 101 Jenkinsfile /root/flask_app/
+                sudo pct push 101 app.py /root/flask_app/
+                sudo pct push 101 nohup.out /root/flask_app/
+                sudo pct push 101 requirements.txt /root/flask_app/
+                sudo pct push 101 venv /root/flask_app/ --recursive
 
                 echo "Restarting flask_app service inside container..."
-                sudo pct exec ${CONTAINER_ID} -- systemctl daemon-reexec
-                sudo pct exec ${CONTAINER_ID} -- systemctl restart flask_app
+                sudo pct exec 101 -- systemctl daemon-reexec
+                sudo pct exec 101 -- systemctl restart flask_app
                 '''
             }
         }
