@@ -1,6 +1,0 @@
-[2025-04-04 12:53:57 +0000] [5166] [INFO] Starting gunicorn 23.0.0
-[2025-04-04 12:53:57 +0000] [5166] [INFO] Listening at: unix:/root/flask_app/flaskapp.sock (5166)
-[2025-04-04 12:53:57 +0000] [5166] [INFO] Using worker: sync
-[2025-04-04 12:53:57 +0000] [5167] [INFO] Booting worker with pid: 5167
-[2025-04-04 12:53:57 +0000] [5168] [INFO] Booting worker with pid: 5168
-[2025-04-04 12:53:57 +0000] [5169] [INFO] Booting worker with pid: 5169
