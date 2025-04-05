@@ -85,12 +85,14 @@ sudo systemctl enable prometheus
 
 ---
 
-## 📸 Screenshots 
+## 📸 Screenshots
 
- screenshots of:
-> - Prometheus Targets page
-> - Jenkins pipeline run
-> - Flask app in browser
+### 1. Jenkins Pipeline
+![Jenkins Pipeline](screenshots/Jenkins.png)
+
+### 2. Prometheus Metrics Dashboard
+![Prometheus Metrics](screenshots/Prometheus.png)
+
 
 ---
 
@@ -99,5 +101,3 @@ sudo systemctl enable prometheus
 This project demonstrates end-to-end deployment, automation, and monitoring using open-source DevOps tools in a Proxmox-based virtualized environment.
 
 ---
-
-Let me know if you'd like me to generate the full markdown file with your specific IPs, metrics, or any screenshots you’ve captured.
