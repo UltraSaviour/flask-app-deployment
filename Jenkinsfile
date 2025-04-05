@@ -7,12 +7,12 @@ pipeline {
         APP_PORT = '5000'
     }
 
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', url: 'https://github.com/UltraSaviour/flask-app-deployment.git'
-            }
-        }
+    stage('Clone Repository') {
+    steps {
+        git branch: 'master', url: 'https://github.com/UltraSaviour/flask-app-deployment.git'
+    }
+}
+
 
         stage('Setup Python Virtual Environment') {
             steps {
