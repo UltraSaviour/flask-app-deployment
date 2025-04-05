@@ -23,15 +23,14 @@ pipeline {
         stage('Deploy Flask App') {
             steps {
                 sh '''
-                    echo "Copying files to app directory..."
-                    sudo cp -r * ${FLASK_APP_DIR}/
-
-                    echo "Restarting SystemD service..."
-                    sudo systemctl daemon-reexec
-                    sudo systemctl restart ${SERVICE_NAME}
-                '''
+                     echo Copying files to app directory...
+                     sudo cp -r Jenkinsfile __pycache__ app.py nohup.out requirements.txt venv /root/flask_app/
+                     echo Restarting SystemD service inside LXC container...
+                     ssh -o StrictHostKeyChecking=no root@<PROXMOX_HOST_IP> pct exec 101 -- systemctl restart flask_app
+                  '''
             }
         }
+
 
         stage('Health Check') {
             steps {
