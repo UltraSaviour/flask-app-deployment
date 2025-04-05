@@ -2,18 +2,12 @@ pipeline {
     agent any
 
     environment {
-        FLASK_APP_DIR = '/root/flask_app'  // Path where your app is deployed
-        SERVICE_NAME = 'flask_app'         // Name of your SystemD service
+        FLASK_APP_DIR = '/root/flask_app'
+        SERVICE_NAME = 'flask_app'
         APP_PORT = '5000'
     }
 
-    stage('Clone Repository') {
-    steps {
-        git branch: 'master', url: 'https://github.com/UltraSaviour/flask-app-deployment.git'
-    }
-}
-
-
+    stages {
         stage('Setup Python Virtual Environment') {
             steps {
                 sh '''
@@ -41,7 +35,7 @@ pipeline {
         stage('Health Check') {
             steps {
                 sh '''
-                    sleep 3  # give the app time to restart
+                    sleep 3
                     curl -f http://localhost:${APP_PORT}/ || echo "Flask app is not responding!"
                 '''
             }
